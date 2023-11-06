@@ -1,0 +1,6 @@
+FROM python:3.8.0
+WORKDIR /app
+COPY requirements-server.txt .
+RUN pip install -r requirements-server.txt
+COPY main-server.py .
+CMD ["flask","--app","main-server.py","run","--host=0.0.0.0"]
