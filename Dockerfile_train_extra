@@ -1,0 +1,6 @@
+FROM python:3.8.0
+WORKDIR /app
+COPY requirements-train-extra.txt .
+RUN pip install -r requirements-train-extra.txt
+COPY main-train-extra.py .
+CMD ["python","main-train-extra.py"]

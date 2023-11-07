@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-extra
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: model-service-extra
+  template:
+    metadata:
+      labels:
+        app: model-service-extra
+    spec:
+      containers:
+      - name: contenedor-model-server
+        image: mariacastellanos/model-server-extra:default
+        env:
+          - name: MODEL_PATH
+            valueFrom:
+              configMapKeyRef:
+                name: configmap-extra
+                key: MODEL_PATH
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        volumeMounts:
+          - name: volume-train
+            mountPath: /model
+      volumes:
+        - name: volume-train
+          hostPath:
+            path: /tmp
+            type: DirectoryOrCreate
+
