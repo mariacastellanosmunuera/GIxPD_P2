@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: job
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+      - name: contenedor-model-train
+        image: mariacastellanos/model-train:default
+        imagePullPolicy: Always
+        env:
+          - name: MODEL_PATH
+            valueFrom:
+              configMapKeyRef:
+                name: configmap
+                key: MODEL_PATH
+        resources:
+          requests:
+            memory: "32Mi"
+            cpu: "50m"
+          limits:
+            memory: "64Mi"
+            cpu: "200m"
+        volumeMounts:
+          - name: volume-train
+            mountPath: /volumen_contenedor
+      volumes:
+        - name: volume-train
+          hostPath:
+            path: /tmp
+            type: DirectoryOrCreate
